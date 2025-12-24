@@ -1,0 +1,121 @@
+basePath: /
+definitions:
+  models.ErrorResponse:
+    properties:
+      error:
+        example: Erreur lors de la récupération
+        type: string
+    type: object
+  models.HealthResponse:
+    properties:
+      status:
+        example: ok
+        type: string
+    type: object
+  models.QuestionResponse:
+    properties:
+      category:
+        example: animaux
+        type: string
+      id:
+        example: 1
+        type: integer
+      image_url:
+        example: https://images.unsplash.com/photo-1548550023-2bdb3c5beed7
+        type: string
+      question:
+        example: Poule ou Coq ?
+        type: string
+    type: object
+  models.SwipeRequest:
+    properties:
+      direction:
+        enum:
+        - left
+        - right
+        example: right
+        type: string
+      question_id:
+        example: 1
+        type: integer
+    required:
+    - direction
+    - question_id
+    type: object
+  models.SwipeResponse:
+    properties:
+      correct:
+        example: true
+        type: boolean
+      message:
+        example: "Bravo! \U0001F389"
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: API pour le jeu de quiz swipe
+  title: Quiz Swipe API
+  version: "1.0"
+paths:
+  /api/question:
+    get:
+      description: Retourne une question aléatoire du quiz sans la réponse correcte
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.QuestionResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Récupérer une question aléatoire
+      tags:
+      - quiz
+  /api/swipe:
+    post:
+      consumes:
+      - application/json
+      description: Vérifie si la direction du swipe correspond à la bonne réponse
+      parameters:
+      - description: Swipe request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.SwipeRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.SwipeResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Vérifier un swipe
+      tags:
+      - quiz
+  /health:
+    get:
+      description: Vérifie que le serveur est en ligne
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.HealthResponse'
+      summary: Health check
+      tags:
+      - health
+swagger: "2.0"

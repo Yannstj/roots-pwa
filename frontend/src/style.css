@@ -1,0 +1,22 @@
+@import 'tailwindcss';
+@plugin "daisyui";
+
+/* Safe area pour iPhone avec encoche */
+@utility pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Styles globaux pour mobile-first */
+body {
+  @apply bg-base-100 text-base-content;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+#app {
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh; /* Dynamic viewport height - s'adapte à la barre d'adresse mobile */
+  overflow: hidden;
+}
